@@ -280,7 +280,48 @@ int get_main_element(int A[], int n)
 }
 
 // 13
+int find_miss_min(int a[], int n)
+{
+    int result = 0;
+    int *is_included = new int[n + 2];
+    for (int i = 0; i < n; i++)
+        is_included[i] = 0;
+    for (int i = 0; i < n; i++)
+        if (a[i] > 0 && a[i] <= n + 1)
+            ++is_included[a[i]];
+    for (int i = 0; i <= n + 2; i++)
+        if (is_included[i] == 0)
+            result = i;
+    delete is_included;
+    return result;
+}
 
+// 14
+int abs(int a)
+{
+    return a < 0 ? -a : a;
+}
+bool is_min(int a, int b, int c)
+{
+    return a <= b && a <= c ? true : false;
+}
+int findMinDistance(int A[], int n, int B[], int m, int C[], int p)
+{
+    int i = 0, j = 0, k = 0, d_min = 0x7fffffff;
+    while (i < n && j < m && k < p && d_min > 0)
+    {
+        int d = abs(A[i] - B[j]) + abs(B[j] - C[k]) + abs(C[k] - A[i]);
+        if (d < d_min)
+            d_min = d;
+        if (is_min(A[i], B[j], C[k]))
+            i++;
+        else if (is_min(B[j], A[i], C[k]))
+            j++;
+        else
+            k++;
+    }
+    return d_min;
+}
 
 int main()
 {
