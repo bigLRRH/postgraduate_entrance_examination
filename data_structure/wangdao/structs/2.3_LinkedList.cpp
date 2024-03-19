@@ -1,5 +1,8 @@
 #include <cstddef>
+#include <cstdio>
 #define ElemType int
+
+// 2.3.1单链表
 typedef struct LNode
 {
     ElemType data;
@@ -90,4 +93,60 @@ bool ListDelete(LinkedList &L, int i, ElemType &e)
         return false;
     LNode *q = p->next;
     e = q->data;
+    p->next = q->next;
+    delete q;
+    return true;
 }
+
+// 头插法建立单链表（带头结点）
+LinkedList List_HeadInsert(LinkedList &L)
+{
+    LNode *s;
+    int x;
+    L = new LNode;
+    L->next = NULL;
+    scanf("%d", &x);
+    while (x != 9999)
+    {
+        s = new LNode;
+        s->data = x;
+        s->next = L->next;
+        L->next = s;
+        scanf("%d", &x);
+    }
+    return L;
+}
+
+// 尾插法建立单链表
+LinkedList List_TailInsert(LinkedList &L)
+{
+    int x;
+    L = new LNode;
+    LNode *s, *r = L;
+    scanf("%d", &x);
+    while (x != 9999)
+    {
+        s = new LNode;
+        s->data = x;
+        s->next = NULL;
+        r->next = s;
+        r = s;
+        scanf("%d", &x);
+    }
+    return L;
+}
+
+// 2.3.2双链表
+typedef struct DNode
+{
+    ElemType data;
+    struct DNode *prior, *next;
+} DNode, *DLinkedList;
+
+// 2.3.5静态链表
+#define MaxSize 50
+typedef struct
+{
+    ElemType data;
+    int next;
+} SLinkList[MaxSize];
