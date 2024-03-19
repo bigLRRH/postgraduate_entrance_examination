@@ -57,10 +57,37 @@ LNode *locateElem(LinkedList &L, ElemType &e)
     return p;
 }
 
-// 插入结点操作
+// 插入结点操作(含头结点)
 bool ListInsert(LinkedList &L, int i, ElemType e)
 {
     LNode *p = L;
-    int j=0;
-    
+    int j = 0;
+    while (p != NULL && j < i)
+    {
+        p = p->next;
+        j++;
+    }
+    if (p == NULL)
+        return false;
+    LNode *s = new LNode;
+    s->data = e;
+    s->next = p->next;
+    p->next = s;
+    return true;
+}
+
+// 删除结点操作
+bool ListDelete(LinkedList &L, int i, ElemType &e)
+{
+    LNode *p = L;
+    int j = 0;
+    while (p != NULL && j < i)
+    {
+        p = p->next;
+        j++;
+    }
+    if (p == NULL || p->next == NULL)
+        return false;
+    LNode *q = p->next;
+    e = q->data;
 }
