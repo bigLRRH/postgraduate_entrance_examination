@@ -63,3 +63,56 @@ void reverse_with_head(LinkedList &head)
 // tc=O(n),sc=O(1)
 
 // 4
+void del_range_with_head(LinkedList &head, int min, int max)
+{
+    LNode *currNode;
+    while (currNode->next != nullptr)
+    {
+        if (currNode->next->data < max && currNode->next->data > min)
+        {
+            LNode *delNode = currNode->next;
+            currNode->next = delNode->next;
+            delete delNode;
+        }
+    }
+    return;
+}
+
+// 5
+// 双指针
+
+// 6
+void split(LinkedList &c, LinkedList &a, LinkedList &b, int n)
+{
+    LNode *curr_a = a, *curr_b = b;
+    for (int i = 0; i < n; i++)
+    {
+        curr_a->next = c->next;
+        curr_a = curr_a->next;
+        c->next = curr_a->next;
+
+        curr_b->next = c->next;
+        curr_b = curr_b->next;
+        c->next = curr_b->next;
+    }
+    return;
+}
+
+// 7
+void del_same(LinkedList &head)
+{
+    LNode *currNode = head;
+    while (currNode->next != nullptr && currNode->next->data == currNode->data)
+    {
+        while (currNode->next->data == currNode->data)
+        {
+            LNode *delNode = currNode->next;
+            currNode->next = delNode->next;
+            delete delNode;
+        }
+        currNode = currNode->next;
+    }
+    return;
+}
+
+// 8
