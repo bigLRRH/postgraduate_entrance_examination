@@ -58,7 +58,7 @@ void del_min_with_head(LinkedList &head)
 void reverse_with_head(LinkedList &head)
 {
     LNode *tempHead = nullptr;
-    while (head->next != nullptr)
+    while (head->next)
     {
         LNode *currNode = head->next;
         head->next = currNode->next;
@@ -349,3 +349,128 @@ int find_k_th_last(LinkedList &l, int k)
 }
 
 // 18
+LinkedList find_mutual_suffix(LinkedList &str1, LinkedList &str2)
+{
+    int len1 = 0, len2 = 0;
+    LNode *currNode1 = str1->next, *currNode2 = str2->next;
+    while (currNode1 != nullptr)
+    {
+        currNode1 = currNode1->next;
+        ++len1;
+    }
+    while (currNode2 != nullptr)
+    {
+        currNode2 = currNode2->next;
+        ++len2;
+    }
+
+    currNode1 = str1->next;
+    currNode2 = str2->next;
+
+    if (len1 > len2)
+    {
+        for (int i = 0; i < len1 - len2; i++)
+        {
+            currNode1 = currNode1->next;
+        }
+    }
+    else
+    {
+        for (int i = 0; i < len2 - len1; i++)
+        {
+            currNode2 = currNode2->next;
+        }
+    }
+
+    while (currNode1 != nullptr && currNode1 != currNode2)
+    {
+        currNode1 = currNode1->next;
+        currNode2 = currNode2->next;
+    }
+
+    return currNode1;
+}
+// tc=O(n),sc=O(1)
+
+// 19
+#include <cmath>
+typedef struct LNode19
+{
+    int data;
+    LNode19 *link;
+} *LinkedList19;
+void remove_abs_duplicates(LinkedList19 &l, int n)
+{
+    bool *is_occurred = new bool[n + 1];
+    for (int i = 0; i < n + 1; i++)
+    {
+        is_occurred[i] = false;
+    }
+    LNode19 *currNode = l;
+    while (currNode->link != nullptr)
+    {
+        if (is_occurred[abs(currNode->link->data)])
+        {
+            // 删除结点
+            LNode19 *delNode = currNode->link;
+            currNode->link = delNode->link;
+            delete delNode;
+        }
+        else
+        {
+            // 跳过并标记
+            is_occurred[abs(currNode->link->data)] = true;
+            currNode = currNode->link;
+        }
+    }
+
+    delete is_occurred;
+
+    return;
+}
+// tc=O(n),sc=O(n)
+
+// 20
+typedef struct LNode20
+{
+    int data;
+    LNode20 *next;
+} *LinkedList20;
+void realign(LinkedList20 &head, int n)
+{
+    LNode20 *h2 = new LNode20;
+    LNode20 *currNode = head;
+    for (int i = 0; i < n / 2; i++)
+    {
+        currNode = currNode->next;
+    }
+    h2->next = currNode->next;
+
+    // reverse h2
+    LNode20 *temp_h2 = nullptr;
+    while (h2->next)
+    {
+        LNode20 *temp = h2->next;
+        h2->next = temp->next;
+        temp->next = temp_h2;
+        temp_h2 = temp;
+    }
+
+    // realign
+    LNode20 *currNode1 = head->next;
+    while (currNode->next)
+    {
+        LNode20 *temp = h2->next;
+        h2->next = temp->next;
+        temp->next = currNode->next;
+        currNode->next = temp;
+        currNode = temp->next;
+    }
+    if (h2->next)
+    {
+        currNode->next = h2->next;
+    }
+
+    delete h2;
+}
+// tn=O(n),sn=O(1)
