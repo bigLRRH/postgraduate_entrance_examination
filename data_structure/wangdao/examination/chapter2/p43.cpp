@@ -26,7 +26,11 @@ void del_x_with_head(LinkedList &head, int x)
             currNode->next = delNode->next;
             delete delNode;
         }
-        currNode = currNode->next;
+        else
+        {
+            // ! 写在else里，否则会忽略连续的x
+            currNode = currNode->next;
+        }
     }
     return;
 }
@@ -82,51 +86,64 @@ void del_range_with_head(LinkedList &head, int min, int max)
             currNode->next = delNode->next;
             delete delNode;
         }
+        else
+        {
+            // ! 没写else
+            currNode = currNode->next;
+        }
     }
     return;
 }
 
 // 5
-// 双指针
+// !! 双指针
+// ! 先对齐再双指针
 
 // 6
 void split(LinkedList &c, LinkedList &a, LinkedList &b, int n)
 {
-    LNode *curr_a = a, *curr_b = b;
+    LNode *curr_a = a;
     for (int i = 0; i < n; i++)
     {
         curr_a->next = c->next;
         curr_a = curr_a->next;
         c->next = curr_a->next;
 
-        curr_b->next = c->next;
-        curr_b = curr_b->next;
-        c->next = curr_b->next;
+        // ! 看清题目 b和a不一样
+        LNode *temp = c->next;
+        c->next = temp->next;
+        temp->next = b;
+        b = temp;
     }
     return;
 }
 
 // 7
+// ! 很难想象当时的精神状态
 void del_same(LinkedList &head)
 {
     LNode *currNode = head;
-    while (currNode->next != nullptr && currNode->next->data == currNode->data)
+    while (currNode->next)
     {
-        while (currNode->next->data == currNode->data)
+        if (currNode->next->data == currNode->data)
         {
             LNode *delNode = currNode->next;
             currNode->next = delNode->next;
             delete delNode;
         }
-        currNode = currNode->next;
+        else
+        {
+            currNode = currNode->next;
+        }
     }
     return;
 }
 
 // 8
+// ! 看清带头结点
 void same(LinkedList &c, LinkedList &a, LinkedList &b)
 {
-    LNode *currA = a, *currB = b, *currC = c;
+    LNode *currA = a->next, *currB = b->next, *currC = c;
     currC = new LNode;
     while (currA != nullptr && currB != nullptr)
     {
@@ -134,6 +151,7 @@ void same(LinkedList &c, LinkedList &a, LinkedList &b)
         {
             currC->next = new LNode;
             currC = currC->next;
+            currC->next = nullptr;
             currC->data = currA->data;
             currA = currA->next;
             currB = currB->next;
@@ -150,9 +168,6 @@ void same(LinkedList &c, LinkedList &a, LinkedList &b)
             }
         }
     }
-    LNode *delNode = c;
-    c = c->next;
-    delete delNode;
     return;
 }
 
@@ -160,6 +175,7 @@ void same(LinkedList &c, LinkedList &a, LinkedList &b)
 // 同上
 
 // 10
+// 滑窗法
 bool pattern(LinkedList &a, LinkedList &b)
 {
     LNode *currA = a, *currB = b;
@@ -193,13 +209,17 @@ bool symmetry(DoubleCircularLinkedList &head)
     bool is_symmetrical = true;
 
     DNode *curr_prior = head->prior, *curr_next = head->next;
-    while (curr_next->next != curr_prior || curr_next != curr_prior)
+    // ! 注意循环条件
+    while (curr_next->next != curr_prior && curr_next != curr_prior)
     {
         if (curr_next->data != curr_prior->data)
         {
             is_symmetrical = false;
             break;
         }
+        // ! 没有迭代
+        curr_next = curr_next->next;
+        curr_prior = curr_prior->prior;
     }
     return is_symmetrical;
 }
@@ -232,36 +252,53 @@ typedef struct LNode13
 L13 Locate(L13 &l, int x)
 {
     LNode13 *target = l->next;
-    while (target != l)
+    // ! 看清题目，非循环双链表
+    // 找到target
+    while (target != nullptr)
     {
         if (target->data == x)
         {
             break;
         }
     }
-    if (target->data == x)
+    // 不存在data值为x的结点
+    if (target == nullptr)
     {
-        ++target->freq;
+        return 0;
     }
+    // target == x
+    ++target->freq;
+    // 取出target
     LNode13 *index = target->pre;
     index->next = target->next;
     index->next->pre = index;
+    // 找到target的前驱结点
     while (index != l && index->data <= x)
     {
         index = index->pre;
     }
+    // 插入target
     target->next = index->next;
-    target->next->pre = target;
+    // ! 判断后面是不是null
+    if (target->next)
+        target->next->pre = target;
     index->next = target;
     target->pre = index;
     return target;
 }
 
 // 14
-void circular_right_shift(LinkedList &L, int n, int k)
+void circular_right_shift(LinkedList &L, int k)
 {
+    // ! 自己计算链表长度
+    int len = 0;
+    for (LNode *currNode = L; currNode != nullptr; currNode = currNode->next)
+    {
+        ++len;
+    }
+
     LNode *fore_head = L, *rear;
-    for (int i = 0; i < n - k; i++)
+    for (int i = 0; i < len - k; i++)
     {
         fore_head = fore_head->next;
     }
@@ -276,6 +313,7 @@ void circular_right_shift(LinkedList &L, int n, int k)
 }
 
 // 15
+// ! 快慢指针
 bool is_cycle(LinkedList &L)
 {
     LNode *fast = L, *slow = L;
@@ -297,6 +335,7 @@ bool is_cycle(LinkedList &L)
         slow = slow->next;
     }
 }
+// tn=O(n),sn=O(1)
 
 // 16
 int max_twins_sum(LinkedList &L, int n)
@@ -326,6 +365,8 @@ int max_twins_sum(LinkedList &L, int n)
     delete sums;
     return max;
 }
+// tn=O(n),sn=O(n)
+// ! 可以逆置后半段链表，使空间复杂度变为O(1)
 
 // 17
 int find_k_th_last(LinkedList &l, int k)
@@ -349,6 +390,7 @@ int find_k_th_last(LinkedList &l, int k)
 }
 
 // 18
+// ! 尾部对齐
 LinkedList find_mutual_suffix(LinkedList &str1, LinkedList &str2)
 {
     int len1 = 0, len2 = 0;
@@ -401,6 +443,7 @@ typedef struct LNode19
 } *LinkedList19;
 void remove_abs_duplicates(LinkedList19 &l, int n)
 {
+    // 字典
     bool *is_occurred = new bool[n + 1];
     for (int i = 0; i < n + 1; i++)
     {
@@ -431,6 +474,7 @@ void remove_abs_duplicates(LinkedList19 &l, int n)
 // tc=O(n),sc=O(n)
 
 // 20
+// 倒置后半段
 typedef struct LNode20
 {
     int data;
