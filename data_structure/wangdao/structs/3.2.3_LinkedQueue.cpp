@@ -26,18 +26,23 @@ void push(LinkedQueue &q, int data)
     q.rear = q.rear->next;
     q.rear->data = data;
     q.rear->next = nullptr;
+    return;
 }
 
 bool pop(LinkedQueue &q, int &data)
 {
+    // 队空
     if (empty(q))
         return false;
+
+    // 队未空
     data = q.front->next->data;
-    LNode *delNode = q.front->next;
-    q.front->next = delNode->next;
+    LNode *target = q.front->next;
+    q.front->next = target->next;
     // ! 判断尾指针是否是最后一个
-    if (q.rear == delNode)
+    // 若原队列只有一个结点，删除后需将rear指向头结点
+    if (q.rear == target)
         q.rear = q.front;
-    delete delNode;
+    delete target;
     return true;
 }
