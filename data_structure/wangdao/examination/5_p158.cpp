@@ -510,10 +510,10 @@ typedef struct node18
     char data[10];
     struct node18 *left, *right;
 } BTree18;
-char *infixExpression(BTree18 *T)
+string infixExpression(BTree18 *T)
 {
     if (T)
     {
-        // return '(' + infixExpression(T->left) + T->data + infixExpression(T->right) + ')';
+        return "(" + infixExpression(T->left) + T->data + infixExpression(T->right) + ")";
     }
 }
