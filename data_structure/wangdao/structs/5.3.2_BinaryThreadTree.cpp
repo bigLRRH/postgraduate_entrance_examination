@@ -1,12 +1,12 @@
-typedef struct BiThreadNode
+typedef struct BinaryThreadNode
 {
     int data;
-    BiThreadNode *leftChild, *rightChild;
+    BinaryThreadNode *leftChild, *rightChild;
     int leftTag, rightTag;
-} BiThreadNode, *BiThreadTree;
+} BinaryThreadNode, *BinaryThreadTree;
 
 // create an inOrder binary thread tree
-void inOrderThreading(BiThreadTree currNode, BiThreadTree &preNode)
+void inOrderThreading(BinaryThreadTree currNode, BinaryThreadTree &preNode)
 {
     if (currNode)
     {
@@ -26,9 +26,9 @@ void inOrderThreading(BiThreadTree currNode, BiThreadTree &preNode)
     }
 }
 
-void createInOrderThread(BiThreadTree t)
+void createInOrderThread(BinaryThreadTree t)
 {
-    BiThreadTree preNode = nullptr;
+    BinaryThreadTree preNode = nullptr;
     if (t != nullptr)
     {
         inOrderThreading(t, preNode);
@@ -38,8 +38,8 @@ void createInOrderThread(BiThreadTree t)
 }
 
 // traverse an inOrder binary thread tree
-void visit(BiThreadNode *node);
-BiThreadNode *firstNode(BiThreadNode *currNode)
+void visit(BinaryThreadNode *node);
+BinaryThreadNode *firstNode(BinaryThreadNode *currNode)
 {
     while (currNode->leftTag == 0)
     {
@@ -47,7 +47,7 @@ BiThreadNode *firstNode(BiThreadNode *currNode)
     }
     return currNode;
 }
-BiThreadNode *nextNode(BiThreadNode *currNode)
+BinaryThreadNode *nextNode(BinaryThreadNode *currNode)
 {
     if (currNode->rightTag == 0)
     {
@@ -55,9 +55,9 @@ BiThreadNode *nextNode(BiThreadNode *currNode)
     }
     return currNode->rightChild;
 }
-void inOrder(BiThreadTree t)
+void inOrder(BinaryThreadTree t)
 {
-    for (BiThreadNode *currNode = t; currNode != nullptr; currNode = nextNode(currNode))
+    for (BinaryThreadNode *currNode = t; currNode != nullptr; currNode = nextNode(currNode))
     {
         visit(currNode);
     }

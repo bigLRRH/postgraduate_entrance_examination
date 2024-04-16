@@ -1,6 +1,7 @@
 #include <iostream>
 #include <queue>
 #include <stack>
+#include <vector>
 using namespace std;
 
 typedef struct BinaryTreeNode
@@ -180,6 +181,25 @@ bool isComplete(BinaryTree T)
 }
 
 // 7
+int countNodesWithDoubleChildren(BinaryTree T)
+{
+    // return T ? T->leftChild && T->rightChild ? countNodesWithDoubleChildren(T->leftChild) + countNodesWithDoubleChildren(T->rightChild) + 1 : countNodesWithDoubleChildren(T->leftChild) + countNodesWithDoubleChildren(T->rightChild) : 0;
+    if (T)
+    {
+        if (T->leftChild && T->rightChild)
+        {
+            return countNodesWithDoubleChildren(T->leftChild) + countNodesWithDoubleChildren(T->rightChild) + 1;
+        }
+        else
+        {
+            return countNodesWithDoubleChildren(T->leftChild) + countNodesWithDoubleChildren(T->rightChild);
+        }
+    }
+    else
+        return 0;
+}
+
+// ! not elegant
 void preOrderCount(BinaryTree T, int &count)
 {
     if (T)
@@ -192,7 +212,7 @@ void preOrderCount(BinaryTree T, int &count)
         preOrderCount(T->rightChild, count);
     }
 }
-int countDoubleBranchesNode(BinaryTree T)
+int countNodesWithDoubleChildren2(BinaryTree T)
 {
     int count = 0;
     preOrderCount(T, count);
@@ -256,7 +276,244 @@ void preOrder_find_x(BinaryTree T, int x)
 }
 
 // 11
-void find_ancestors_of_x()
+void find_ancestors_of_x(BinaryTree T, int x)
 {
-    
+    stack<BinaryTreeNode *> s;
+    BinaryTreeNode *currNode = T, *preNode;
+    while (currNode || !s.empty())
+    {
+        if (currNode)
+        {
+            if (currNode->data == x)
+                break;
+            s.push(currNode);
+            currNode = currNode->leftChild;
+        }
+        else
+        {
+            currNode = s.top();
+            if (currNode->rightChild && currNode->rightChild != preNode)
+            {
+                currNode = currNode->rightChild;
+            }
+            else
+            {
+                s.pop();
+                preNode = currNode;
+                currNode = nullptr;
+            }
+        }
+    }
+    // q is the required sequence
+    queue<BinaryTreeNode *> q;
+    while (!s.empty())
+    {
+        q.push(s.top());
+        s.pop();
+    }
+}
+// tn=O(n),sn=O(n)
+// 可以求先序序列和后序序列通过比较得到祖先结点，自己想的比上面的算法效率略低
+
+// 12
+void ancestor(BinaryTree root, BinaryTreeNode *p, BinaryTreeNode *q, BinaryTreeNode *r)
+{
+    vector<BinaryTreeNode *> v1, v2;
+    int top1{-1}, top2{-1};
+    BinaryTreeNode *currNode{root}, *preNode{nullptr}, *markNode{nullptr};
+
+    // find all ancestors
+    while (currNode || top1 > -1)
+    {
+        if (currNode)
+        {
+            if (currNode == p || currNode == q)
+            {
+                if (top2 == -1)
+                {
+                    while (top2 < top1)
+                    {
+                        ++top2;
+                        v2[top2] = v1[top2];
+                    }
+                    markNode == currNode;
+                }
+                else if (currNode != markNode)
+                {
+                    break;
+                }
+            }
+
+            v1[++top1] = currNode;
+            currNode = currNode->leftChild;
+        }
+        else
+        {
+            currNode = v1[top1];
+            if (currNode->rightChild && currNode->rightChild != preNode)
+            {
+                currNode = currNode->rightChild;
+            }
+            else
+            {
+                preNode = currNode;
+                currNode = nullptr;
+                --top1;
+            }
+        }
+    }
+
+    // find the nearest ancestor
+    for (int i = top1; i > -1; --i)
+    {
+        for (int j = top2; j > -1; --j)
+        {
+            if (v1[top1] == v2[top2])
+            {
+                r = v1[top1];
+                return;
+            }
+        }
+    }
+}
+
+// 13
+int getWidth(BinaryTree root)
+{
+    if (!root)
+        return 0;
+    queue<BinaryTreeNode *> q;
+    int front{-1}, rear{-1}, last{0}, maxWidth{0};
+    BinaryTreeNode *currNode;
+    q.push(root);
+    while (!q.empty())
+    {
+        currNode = q.front();
+        q.pop();
+        ++front;
+        if (currNode->leftChild)
+        {
+            q.push(currNode->leftChild);
+            ++rear;
+        }
+        if (currNode->rightChild)
+        {
+            q.push(currNode->rightChild);
+            ++rear;
+        }
+        if (front == last)
+        {
+            int width = rear - last;
+            if (width > maxWidth)
+                maxWidth = width;
+
+            last = rear;
+        }
+    }
+    return maxWidth;
+}
+// tn=O(n),sn=O(n)
+
+// 14
+void convertPreSeqToPostSeq_of_fullTree(
+    vector<BinaryTreeNode *> const &preSeq, vector<BinaryTreeNode *> &postSeq,
+    int preLeft, int preRight, int postLeft, int postRight)
+{
+    if (preRight == preLeft + 1)
+    {
+        postSeq[postLeft] = preSeq[preLeft];
+        postSeq[postRight] = preSeq[preRight];
+    }
+    else
+    {
+        int preRoot = preLeft;
+        int postRoot = postRight;
+        postSeq[postRoot] = preSeq[preRoot];
+        int preLL = preLeft + 1;
+        int preLR = (preLeft + preRight + 1) / 2;
+        int postLL = postLeft;
+        int postLR = (postLeft + postRight + 1) / 2;
+        convertPreSeqToPostSeq_of_fullTree(preSeq, postSeq, preLL, preLR, postLL, postLR);
+        int preRL = preLR + 1;
+        int preRR = preRight;
+        int postRL = postLR + 1;
+        int postRR = postRight - 1;
+        convertPreSeqToPostSeq_of_fullTree(preSeq, postSeq, preRL, preRR, postRL, postRR);
+    }
+}
+void convertPreSeqToPostSeq_of_fullTree(vector<BinaryTreeNode *> const &preSeq, vector<BinaryTreeNode *> &postSeq)
+{
+    convertPreSeqToPostSeq_of_fullTree(preSeq, postSeq, 0, preSeq.size() - 1, 0, postSeq.size() - 1);
+}
+
+// 15
+void inOrderThreading(BinaryTreeNode *currNode, BinaryTreeNode *&preNode, BinaryTreeNode *&head)
+{
+    if (currNode)
+    {
+        inOrderThreading(currNode->leftChild, preNode, head);
+        if (!head)
+        {
+            head = currNode;
+        }
+        if (preNode && preNode->rightChild)
+        {
+            preNode->rightChild = currNode;
+        }
+        preNode = currNode;
+        inOrderThreading(currNode->rightChild, preNode, head);
+    }
+}
+void createInOrderThread(BinaryTree T, BinaryTreeNode *&head)
+{
+    BinaryTreeNode *preNode;
+    inOrderThreading(T, preNode, head);
+}
+
+// 16
+bool preOrderJudgeSimilarity(BinaryTree T1, BinaryTree T2)
+{
+    if (T1 && T2)
+        return preOrderJudgeSimilarity(
+                   T1->leftChild, T2->leftChild) &&
+               preOrderJudgeSimilarity(
+                   T1->rightChild, T2->rightChild);
+    else if (!(T1 || T2))
+        return true;
+    else
+        return false;
+}
+
+// 17
+typedef struct BinaryTreeNode17
+{
+    int weight;
+    BinaryTreeNode17 *leftChild, *rightChild;
+
+} *BinaryTree17;
+
+int WPL(BinaryTree17 T)
+{
+    if (T)
+    {
+        if (!(T->leftChild || T->rightChild))
+            return T->weight;
+        return WPL(T->leftChild) + WPL(T->rightChild);
+    }
+    else
+        return 0;
+}
+
+// 18
+typedef struct node18
+{
+    char data[10];
+    struct node18 *left, *right;
+} BTree18;
+char *infixExpression(BTree18 *T)
+{
+    if (T)
+    {
+        // return '(' + infixExpression(T->left) + T->data + infixExpression(T->right) + ')';
+    }
 }
