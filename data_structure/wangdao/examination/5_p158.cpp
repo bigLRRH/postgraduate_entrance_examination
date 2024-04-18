@@ -276,10 +276,14 @@ void preOrder_find_x(BinaryTree T, int x)
 }
 
 // 11
-void find_ancestors_of_x(BinaryTree T, int x)
+queue<BinaryTreeNode *> find_ancestors_of_x(BinaryTree T, int x)
 {
     stack<BinaryTreeNode *> s;
-    BinaryTreeNode *currNode = T, *preNode;
+    BinaryTreeNode *currNode = T, *preNode = nullptr;
+
+    // q is the required sequence
+    queue<BinaryTreeNode *> q;
+
     while (currNode || !s.empty())
     {
         if (currNode)
@@ -304,13 +308,14 @@ void find_ancestors_of_x(BinaryTree T, int x)
             }
         }
     }
-    // q is the required sequence
-    queue<BinaryTreeNode *> q;
+
     while (!s.empty())
     {
         q.push(s.top());
         s.pop();
     }
+
+    return q;
 }
 // tn=O(n),sn=O(n)
 // 可以求先序序列和后序序列通过比较得到祖先结点，自己想的比上面的算法效率略低
@@ -336,7 +341,7 @@ void ancestor(BinaryTree root, BinaryTreeNode *p, BinaryTreeNode *q, BinaryTreeN
                         ++top2;
                         v2[top2] = v1[top2];
                     }
-                    markNode == currNode;
+                    markNode = currNode;
                 }
                 else if (currNode != markNode)
                 {
@@ -386,6 +391,8 @@ int getWidth(BinaryTree root)
     int front{-1}, rear{-1}, last{0}, maxWidth{0};
     BinaryTreeNode *currNode;
     q.push(root);
+    // ! 初始push也要++rear
+    ++rear;
     while (!q.empty())
     {
         currNode = q.front();
@@ -492,13 +499,32 @@ typedef struct BinaryTreeNode17
 
 } *BinaryTree17;
 
-int WPL(BinaryTree17 T)
+int WPL(BinaryTree17 T, int depth = 0)
 {
     if (T)
     {
         if (!(T->leftChild || T->rightChild))
-            return T->weight;
-        return WPL(T->leftChild) + WPL(T->rightChild);
+            return T->weight * depth;
+        return WPL(T->leftChild, depth + 1) + WPL(T->rightChild, depth + 1);
+    }
+    else
+        return 0;
+}
+// ! 方法2
+int WPL2(BinaryTree17 T)
+{
+    if (T)
+    {
+        if (!(T->leftChild || T->rightChild))
+            return 0;
+        else
+        {
+            int w_l = WPL2(T->leftChild);
+            int w_r = WPL2(T->rightChild);
+            T->weight = T->leftChild ? T->leftChild->weight : 0 + T->rightChild ? T->rightChild->weight
+                                                                                : 0;
+            return w_l + w_r + T->weight;
+        }
     }
     else
         return 0;
@@ -514,6 +540,48 @@ string infixExpression(BTree18 *T)
 {
     if (T)
     {
-        return "(" + infixExpression(T->left) + T->data + infixExpression(T->right) + ")";
+        if (!(T->left || T->right))
+            return T->data;
+        else
+            return "(" + infixExpression(T->left) + T->data + infixExpression(T->right) + ")";
     }
+    else
+    {
+        return nullptr;
+    }
+}
+
+// 19
+typedef struct
+{
+    int SqBitNode[100];
+    int ElemNum;
+} SqBiTree;
+int left(int index)
+{
+    return index * 2 + 1;
+}
+int right(int index)
+{
+    return index * 2 + 2;
+}
+bool inOrderJudgeIsBST(SqBiTree T, int index = 0, int &pre)
+{
+    if (T.SqBitNode[index] == -1)
+        return true;
+    if (index >= 0 && index < T.ElemNum)
+    {
+        bool a = inOrderJudgeIsBST(T, left(index), pre);
+        pre = index;
+        bool flag = pre == -1 || T.SqBitNode[index] >= T.SqBitNode[pre];
+        bool b = inOrderJudgeIsBST(T, right(index), pre);
+        return a && b && flag;
+    }
+    else
+        return true;
+}
+bool judgeIsBST(SqBiTree T)
+{
+    int pre = -1;
+    return inOrderJudgeIsBST(T, pre);
 }
