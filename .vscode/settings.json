@@ -11,6 +11,7 @@
         "type_traits": "cpp",
         "new": "cpp",
         "stdexcept": "cpp",
-        "system_error": "cpp"
+        "system_error": "cpp",
+        "algorithm": "cpp"
     }
 }
