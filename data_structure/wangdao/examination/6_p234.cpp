@@ -1,3 +1,4 @@
+#include <cstdio>
 #include <queue>
 using namespace std;
 
@@ -36,6 +37,8 @@ bool isTree(AdjacencyListGraph &G)
         isVisited[i] = false;
     }
     queue<int> q;
+    int count_traverse_node = 1;
+    int count_traverse_edge = 0;
     isVisited[0] = true;
     q.push(0);
     while (!q.empty())
@@ -46,41 +49,59 @@ bool isTree(AdjacencyListGraph &G)
         for (ArcNode *i = G.vertexList[currIndex].firstArc; i; i = i->nextArc)
         {
             int adjIndex = i->adjacentVertexIndex;
-            if (isVisited[adjIndex])
-                return false;
-            else
+            // ! 上个结点也有可能return false
+            // if (isVisited[adjIndex])
+            //     return false;
+            // else
+            // {
+            //     isVisited[adjIndex] = true;
+            //     ++count_traverse_node;
+            //     q.push(adjIndex);
+            // }
+            ++count_traverse_edge;
+            if (!isVisited[adjIndex])
             {
                 isVisited[adjIndex] = true;
+                ++count_traverse_node;
                 q.push(adjIndex);
             }
         }
     }
-    return true;
+    return count_traverse_node == G.vertexNum && count_traverse_edge / 2 == G.arcNum - 1;
 }
 
-bool isTree(AdjacentMatrixGraph &G, int currIndex, bool isVisited[MaxVertexNum] = {0})
+void isTree_dfs(AdjacentMatrixGraph &G, int currIndex, int &count_vertex, int &count_edge, bool isVisited[MaxVertexNum] = {0})
 {
+    ++count_vertex;
     isVisited[currIndex] = true;
     for (int i = 0; i < G.vertexNum; ++i)
     {
         if (G.arcMatrix[currIndex][i])
         {
-            if (isVisited[i])
-            {
-                return false;
-            }
-            else
+            ++count_edge;
+            if (!isVisited[i])
             {
                 // !会过早返回true导致没有遍历所有结点
                 // return isTree(G, i, isVisited);
-                if (!isTree(G, i, isVisited))
-                    return false;
+                isTree_dfs(G, i, count_vertex, count_edge, isVisited);
             }
         }
     }
-    return true;
 }
-
+bool isTree(AdjacentMatrixGraph &G)
+{
+    int count_vertex = 0, count_edge = 0;
+    bool isVisited[MaxVertexNum];
+    for (int i = 0; i < G.vertexNum; ++i)
+    {
+        isVisited[i] = false;
+    }
+    isTree_dfs(G, 0, count_vertex, count_edge, isVisited);
+    if (count_vertex == G.vertexNum && count_edge / 2 == G.arcNum - 1)
+        return true;
+    else
+        return false;
+}
 // 4
 bool hasPath_bfs(AdjacencyListGraph G, int i, int j)
 {
@@ -124,8 +145,6 @@ bool dfs4(AdjacencyListGraph &G, int currIndex, int j, bool isVisited[MaxVertexN
         int adjIndex = arc->adjacentVertexIndex;
         if (!isVisited[adjIndex])
         {
-            // if (adjIndex == j)
-            //     return true;
             if (dfs4(G, adjIndex, j, isVisited))
                 return true;
         }
@@ -143,6 +162,37 @@ bool hasPath_dfs(AdjacencyListGraph &G, int i, int j)
 }
 
 // 5
-void printAllPath(AdjacencyListGraph &G, int v1, int v2, int path[MaxVertexNum], int distance)
+void dfsPrintAllPath(AdjacencyListGraph &G, int currIndex, int v2,
+                     int path[MaxVertexNum], bool isVisited[MaxVertexNum], int distance = 0)
 {
+    path[distance] = currIndex;
+    if (currIndex == v2)
+    {
+        for (int i = 0; i <= distance; ++i)
+        {
+            printf("%d", path[i]);
+        }
+        printf("\n");
+    }
+    isVisited[currIndex] = true;
+    for (ArcNode *arc = G.vertexList[currIndex].firstArc; arc; arc = arc->nextArc)
+    {
+        int adjIndex = arc->adjacentVertexIndex;
+        if (!isVisited[adjIndex])
+        {
+            dfsPrintAllPath(G, adjIndex, v2, path, isVisited, distance + 1);
+        }
+    }
+    isVisited[currIndex] = false;
+}
+void printAllPath(AdjacencyListGraph &G, int v1, int v2)
+{
+    int path[MaxVertexNum];
+    bool isVisited[MaxVertexNum];
+    for (int i = 0; i < G.vertexNum; ++i)
+    {
+        path[i] = -1;
+        isVisited[i] = false;
+    }
+    dfsPrintAllPath(G, v1, v2, path, isVisited, 0);
 }
