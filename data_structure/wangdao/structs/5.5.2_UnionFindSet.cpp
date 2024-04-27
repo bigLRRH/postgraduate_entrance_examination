@@ -20,34 +20,15 @@ int find(int s[], int x)
 }
 
 // union是内置符
-void Union(int s[], int root1, int root2)
+void merge(int s[], int i, int j)
 {
-    if (root1 == root2)
+    if (i == j)
         return;
-    s[root2] = root1;
+    s[j] = i;
 }
 
 // 优化
-void advancedUnion(int s[], int root1, int root2)
-{
-    if (root1 == root2)
-    {
-        return;
-    }
-    // ! 负数值大的是小树
-    if (s[root2] > s[root1])
-    {
-        s[root1] += s[root2];
-        s[root2] = root1;
-    }
-    else
-    {
-        s[root2] += s[root1];
-        s[root1] = root2;
-    }
-}
-
-int advancedFind(int s[], int x)
+int fix(int s[], int x)
 {
     int root = x;
     while (s[root] >= 0)
@@ -61,4 +42,23 @@ int advancedFind(int s[], int x)
         x = t;
     }
     return root;
+}
+
+void mix(int s[], int i, int j)
+{
+    if (i == j)
+    {
+        return;
+    }
+    // ! 负数值大的是小树
+    if (s[j] > s[i])
+    {
+        s[i] += s[j];
+        s[j] = i;
+    }
+    else
+    {
+        s[j] += s[i];
+        s[i] = j;
+    }
 }
