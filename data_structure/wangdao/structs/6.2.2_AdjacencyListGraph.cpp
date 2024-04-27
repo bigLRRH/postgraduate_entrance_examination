@@ -1,4 +1,4 @@
-#define MaxVertexNum 100
+const constexpr int MaxVertexNum = 100;
 typedef char VertexType;
 typedef struct ArcNode
 {

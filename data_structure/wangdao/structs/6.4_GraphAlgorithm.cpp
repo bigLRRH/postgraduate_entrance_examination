@@ -1,7 +1,8 @@
 #include <cstdio>
 #include <limits>
+#include <stack>
+using namespace std;
 const constexpr int MAX_VERTEX_NUM = 100;
-const constexpr int INFINITY = std::numeric_limits<int>::max();
 
 typedef char VertexType;
 typedef int ArcType;
@@ -23,6 +24,23 @@ int locateVertex(AdjacentMatrixGraph &G, VertexType v)
     }
     return -1;
 }
+
+typedef struct ArcNode
+{
+    int adjacentVertexIndex;
+    int info;
+    ArcNode *nextArc;
+} ArcNode;
+typedef struct VertexNode
+{
+    VertexType vertex;
+    ArcNode *firstArc;
+} AdjacencyList[MAX_VERTEX_NUM];
+typedef struct
+{
+    AdjacencyList vertexList;
+    int vertexNum, arcNum;
+} AdjacencyListGraph;
 
 // Prim
 struct CloseEdge
@@ -113,7 +131,7 @@ void mix(UnionFindSet ufSet, int i, int j)
 
 void minimumSpanningCostTree_Kruskal(AdjacentMatrixGraph &G, VertexType u)
 {
-    int k = locateVertex(G, u);
+    // todo sort edges
 }
 
 // Dijkstra
@@ -214,3 +232,136 @@ void shortestPath_Floyd(AdjacentMatrixGraph &G, bool pathList[MAX_VERTEX_NUM][MA
     }
 }
 // tn=O(v^3) no pathList
+
+// topologicalSort
+void findInDegree(AdjacencyListGraph &G, int inDegree[MAX_VERTEX_NUM])
+{
+    for (int i = 0; i < G.vertexNum; ++i)
+    {
+        inDegree[i] = 0;
+    }
+
+    for (int i = 0; i < G.vertexNum; ++i)
+    {
+        for (ArcNode *currArcNode = G.vertexList[i].firstArc; currArcNode; currArcNode = currArcNode->nextArc)
+        {
+            ++inDegree[currArcNode->adjacentVertexIndex];
+        }
+    }
+}
+
+bool topologicalSort(AdjacencyListGraph &G)
+{
+    int inDegree[MAX_VERTEX_NUM];
+    findInDegree(G, inDegree);
+    stack<int> s;
+    for (int i = 0; i < G.vertexNum; ++i)
+    {
+        if (inDegree[i] == 0)
+        {
+            s.push(i);
+        }
+    }
+    int count = 0;
+    while (!s.empty())
+    {
+        int currIndex = s.top();
+        s.pop();
+        printf("%d %c\n", currIndex, G.vertexList[currIndex].vertex);
+        ++count;
+        for (ArcNode *currArcNode = G.vertexList[currIndex].firstArc; currArcNode; currArcNode = currArcNode->nextArc)
+        {
+            int adjVex = currArcNode->adjacentVertexIndex;
+            if (--inDegree[adjVex] == 0)
+            {
+                s.push(adjVex);
+            }
+        }
+    }
+    if (count < G.vertexNum)
+        return false;
+    else
+        return true;
+}
+
+// CriticalPath
+bool topologicalOrder(AdjacencyListGraph &G, stack<int> &T, int ve[MAX_VERTEX_NUM])
+{
+    int inDegree[MAX_VERTEX_NUM];
+    findInDegree(G, inDegree);
+    stack<int> s;
+    for (int i = 0; i < G.vertexNum; ++i)
+    {
+        if (inDegree[i] == 0)
+            s.push(i);
+    }
+
+    int count = 0;
+    for (int i = 0; i < G.vertexNum; ++i)
+    {
+        ve[i] = 0;
+    }
+    while (!s.empty())
+    {
+        int currIndex = s.top();
+        s.pop();
+        T.push(currIndex);
+        ++count;
+        for (ArcNode *currArcNode = G.vertexList[currIndex].firstArc; currArcNode; currArcNode = currArcNode->nextArc)
+        {
+            int adjVex = currArcNode->adjacentVertexIndex;
+            if (--inDegree[adjVex] == 0)
+            {
+                s.push(adjVex);
+            }
+            int durationTime = currArcNode->info;
+            if (ve[currIndex] + durationTime > ve[adjVex])
+            {
+                ve[adjVex] = ve[currIndex] + durationTime;
+            }
+        }
+    }
+    if (count < G.vertexNum)
+        return false;
+    else
+        return true;
+}
+bool criticalPath(AdjacencyListGraph &G)
+{
+    int ve[MAX_VERTEX_NUM];
+    stack<int> T;
+    if (!topologicalOrder(G, T, ve))
+        return false;
+    int vl[MAX_VERTEX_NUM];
+    for (int i = 0; i < G.vertexNum; ++i)
+    {
+        vl[i] = ve[G.vertexNum - 1 - i];
+    }
+    while (!T.empty())
+    {
+        int currIndex = T.top();
+        T.pop();
+        for (ArcNode *currArcNode = G.vertexList[currIndex].firstArc; currArcNode; currArcNode = currArcNode->nextArc)
+        {
+            int adjVex = currArcNode->adjacentVertexIndex;
+            int durationTime = currArcNode->info;
+            if (vl[adjVex] - durationTime < vl[currIndex])
+            {
+                vl[currIndex] = vl[adjVex] - durationTime;
+            }
+        }
+    }
+    for (int i = 0; i < G.vertexNum; ++i)
+    {
+        for (ArcNode *currArcNode = G.vertexList[i].firstArc; currArcNode; currArcNode = currArcNode->nextArc)
+        {
+            int adjVex = currArcNode->adjacentVertexIndex;
+            int durationTime = currArcNode->info;
+            int e = ve[i];
+            int l = vl[adjVex] - durationTime;
+            char tag = (e == l) ? '*' : ' ';
+            printf("%d %d %d %d %d %c\n", i, adjVex, durationTime, e, l, tag);
+        }
+    }
+    return true;
+}
