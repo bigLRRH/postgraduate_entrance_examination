@@ -188,7 +188,7 @@ $$
     \begin{equation*}
         [x]_\text{补}=
         \begin{cases}
-            0,x     & 0 \le x < 2^n \\
+            0,x                 & 0 \le x < 2^n \\
             2^{n+1}=2^{n+1}-|x| & -2^n \le x < 0
         \end{cases}
     \end{equation*} &
@@ -203,7 +203,7 @@ $$
     \hline
     \text{原码} &
     \begin{aligned}
-      \lbrack x \rbrack_\text{原} = \begin{cases}
+        [x]_\text{原} = \begin{cases}
             0,x             & 0 \le x < 2^n \\
             2^n-x=2^n+|x|   & -2^n < x \le 0
         \end{cases}
@@ -212,7 +212,7 @@ $$
     \hline
     \text{补码} &
     \begin{aligned}
-        \lbrack x \rbrack_\text{补} = \begin{cases}
+        [x]_\text{补} = \begin{cases}
             0,x     & 0 \le x < 2^n \\
             2^{n+1}=2^{n+1}-|x| & -2^n \le x < 0
         \end{cases}
