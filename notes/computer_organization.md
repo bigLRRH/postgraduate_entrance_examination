@@ -176,21 +176,21 @@ $$
     \text{编码} & \text{定义} & \text{解释} \\
     \hline
     \text{原码} &
-    \begin{aligned}
+    \begin{equation*}
         [x]_\text{原} = \begin{cases}
             0,x             & 0 \le x \lt 2^n \\
             2^n-x=2^n+|x|   & -2^n \lt x \le 0
         \end{cases}
-    \end{aligned} &
+    \end{equation*} &
     \text{aaa} \\
     \hline
     \text{补码} &
-    \begin{aligned}
+    \begin{equation*}
         [x]_\text{补} = \begin{cases}
             0,x                     & 0 \le x \lt 2^n \\
             2^{n+1}=2^{n+1}-|x|     & -2^n \le x \lt 0
         \end{cases}
-    \end{aligned} &
+    \end{equation*} &
     \text{aaa} \\
     \hline
 \end{array}
