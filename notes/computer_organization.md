@@ -196,6 +196,31 @@ $$
     \hline
 \end{array}
 $$
+$$
+\begin{array}{|c|c|c|}
+    \hline
+    \text{编码} & \text{定义} & \text{解释} \\
+    \hline
+    \text{原码} &
+    \begin{aligned}
+      \lbrack x \rbrack_\text{原} = \begin{cases}
+            0,x             & 0 \le x < 2^n \\
+            2^n-x=2^n+|x|   & -2^n < x \le 0
+        \end{cases}
+    \end{aligned} &
+    \text{aaa} \\
+    \hline
+    \text{补码} &
+    \begin{aligned}
+        \lbrack x \rbrack_\text{补} = \begin{cases}
+            0,x     & 0 \le x < 2^n \\
+            2^{n+1}=2^{n+1}-|x| & -2^n \le x < 0
+        \end{cases}
+    \end{aligned} &
+    \text{aaa} \\
+    \hline
+\end{array}
+$$
 
 ### 2.2 运算方法和运算电路
 
