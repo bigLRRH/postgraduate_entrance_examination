@@ -127,7 +127,8 @@ $$
 
 CPU 执行时间度量公式中的时钟周期、指令条数、CPI 三个因素相互制约。同一台计算机，指令条数最少的程序也不一定执行得最快。
 
-**_注：下表辅助记忆，非官方_**  
+**_注：下表辅助记忆，非官方_**
+
 $$
 \begin{array}{|l|l|l|}
     \hline
@@ -175,37 +176,10 @@ $$
     \text{编码} & \text{定义} & \text{解释} \\
     \hline
     \text{原码} &
-    \begin{equation*}
-      [x]_\text{原}=
-        \begin{cases}
-            0,x             & 0 \le x < 2^n \\
-            2^n-x=2^n+|x|   & -2^n < x \le 0
-        \end{cases}
-    \end{equation*} &
-    aaa \\
-    \hline
-    \text{补码} &
-    \begin{equation*}
-        [x]_\text{补}=
-        \begin{cases}
-            0,x                 & 0 \le x < 2^n \\
-            2^{n+1}=2^{n+1}-|x| & -2^n \le x < 0
-        \end{cases}
-    \end{equation*} &
-    aaa \\
-    \hline
-\end{array}
-$$
-$$
-\begin{array}{|c|c|c|}
-    \hline
-    \text{编码} & \text{定义} & \text{解释} \\
-    \hline
-    \text{原码} &
     \begin{aligned}
         [x]_\text{原} = \begin{cases}
-            0,x             & 0 \le x < 2^n \\
-            2^n-x=2^n+|x|   & -2^n < x \le 0
+            0,x             & 0 \le x \lt 2^n \\
+            2^n-x=2^n+|x|   & -2^n \lt x \le 0
         \end{cases}
     \end{aligned} &
     \text{aaa} \\
@@ -213,8 +187,8 @@ $$
     \text{补码} &
     \begin{aligned}
         [x]_\text{补} = \begin{cases}
-            0,x     & 0 \le x < 2^n \\
-            2^{n+1}=2^{n+1}-|x| & -2^n \le x < 0
+            0,x                     & 0 \le x \lt 2^n \\
+            2^{n+1}=2^{n+1}-|x|     & -2^n \le x \lt 0
         \end{cases}
     \end{aligned} &
     \text{aaa} \\
