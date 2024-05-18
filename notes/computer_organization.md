@@ -104,45 +104,58 @@ CPU 主脉冲信号的宽度，CPU 工作的最小时间单位。
 
 $$
 \begin{align*}
-    CPU执行时间 &= 程序总时钟周期数 \div 时钟频率  \\
-                &= 程序总时钟周期数 \times 时钟周期
+    \text{CPU执行时间}   &= \frac{\text{程序总时钟周期数}}{\text{时钟频率}}  \\
+                        &= \text{程序总时钟周期数} \times \text{时钟周期}
 \end{align*}
 $$
 
 $$
-程序总时钟周期数=程序总指令条数 \times CPI
+\text{程序总时钟周期数}=\text{程序总指令条数} \times CPI
 $$
 
 $$
-    程序总时钟周期数 = \sum_{i=1}^{n}(CPI_i \times C_i)
+    \text{程序总时钟周期数} = \sum_{i=1}^{n}(CPI_i \times C_i)
 $$
 
-其中，第$i$种指令的条数和 CPI 分别为$C_i$和$CPI_i$。
+其中，第 $i$ 种指令的条数和 CPI 分别为 $C_i$ 和 $CPI_i$ 。
 
 $$
     CPI = \sum_{i=1}^{n}(CPI_i \times F_i) = \text{程序总时钟周期数} \div \text{程序总指令条数}
 $$
 
-其中,$F_i$ 表示第 $i$ 种指令在程序中所占的比例。
+其中, $F_i$ 表示第 $i$ 种指令在程序中所占的比例。
 
 CPU 执行时间度量公式中的时钟周期、指令条数、CPI 三个因素相互制约。同一台计算机，指令条数最少的程序也不一定执行得最快。
 
 **_注：下表辅助记忆，非官方_**  
-| 名称         | 缩写 | 单位                                       |
-| ------------ | ---- | ------------------------------------------ |
-| 主频         | f    | 赫兹（Hz）                                 |
-| CPI          | CPI  | 周期数每指令（cpi，cycle per instruction） |
-| 指令条数     | I    | 条                                         |
-| 周期         | T    | 秒（s）                                    |
-| 周期数       | C    | 个（c,cycles）或（t，times）               |
-| CPU 执行时间 | t    | 秒（s）                                    |
+$$
+\begin{array}{|l|l|l|}
+    \hline
+    \text{名称} & \text{缩写} & \text{单位} \\
+    \hline
+    \text{主频} & f & \text{赫兹（Hz）} \\
+    \text{CPI} & \text{CPI} & \text{周期数每指令（cpi，cycle per instruction）} \\
+    \text{指令条数} & I & \text{条} \\
+    \text{周期} & T & \text{秒（s）} \\
+    \text{周期数} & C & \text{个（c,cycles）或（t，times）} \\
+    \text{CPU 执行时间} & t & \text{秒（s）} \\
+    \hline
+\end{array}
+$$
 
 #### 1.2.3 MIPS、MFLOPS、GFLOPS、TFLOPS、PFLOPS、EFLOPS、ZFLOPS
 
-| 前缀   | Z         | E         | P         | T         | G        | M        | K        | 1      | m         | $\mu$     | n         | p          |
-| ------ | --------- | --------- | --------- | --------- | -------- | -------- | -------- | ------ | --------- | --------- | --------- | ---------- |
-| $10^n$ | $10^{21}$ | $10^{18}$ | $10^{15}$ | $10^{12}$ | $10^9$   | $10^6$   | $10^3$   | $10^0$ | $10^{-3}$ | $10^{-6}$ | $10^{-9}$ | $10^{-12}$ |
-| $2^n$  | $2^{70}$  | $2^{60}$  | $2^{50}$  | $2^{40}$  | $2^{30}$ | $2^{20}$ | $2^{10}$ | $2^0$  | $2^{-10}$ | $2^{-20}$ | $2^{-30}$ | $2^{-40}$  |
+$$
+\begin{array}{|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+    \hline
+    \text{前缀} & Z & E & P & T & G & M & K & 1 & m & \mu & n & p \\
+    \hline
+    10^n & 10^{21} & 10^{18} & 10^{15} & 10^{12} & 10^9 & 10^6 & 10^3 & 10^0 & 10^{-3} & 10^{-6} & 10^{-9} & 10^{-12} \\
+    \hline
+     2^n & 2^{70} & 2^{60} & 2^{50} & 2^{40} & 2^{30} & 2^{20} & 2^{10} & 2^0 & 2^{-10} & 2^{-20} & 2^{-30} & 2^{-40} \\
+    \hline
+\end{array}
+$$
 
 ## 2 数据的表示和运算
 
@@ -159,17 +172,27 @@ CPU 执行时间度量公式中的时钟周期、指令条数、CPI 三个因素
 $$
 \begin{array}{|c|c|c|}
     \hline
-    \text{编码}&\text{定义}&\text{解释}\\
+    \text{编码} & \text{定义} & \text{解释} \\
     \hline
-    \text{原码}&
+    \text{原码} &
     \begin{equation*}
       [x]_\text{原}=
         \begin{cases}
-            0,x&0\le x \lt 2^n \\
-            2^n-x=2^n+|x|&-2^n \lt x \le 0
+            0,x             & 0 \le x < 2^n \\
+            2^n-x=2^n+|x|   & -2^n < x \le 0
         \end{cases}
-    \end{equation*}
-    &aaa \\
+    \end{equation*} &
+    aaa \\
+    \hline
+    \text{补码} &
+    \begin{equation*}
+        [x]_\text{补}=
+        \begin{cases}
+            0,x     & 0 \le x < 2^n \\
+            2^{n+1}=2^{n+1}-|x| & -2^n \le x < 0
+        \end{cases}
+    \end{equation*} &
+    aaa \\
     \hline
 \end{array}
 $$
