@@ -103,57 +103,57 @@ CPU 主脉冲信号的宽度，CPU 工作的最小时间单位。
 **公式：**
 
 $$
-\begin{align*}
-    \text{CPU执行时间}   &= \frac{\text{程序总时钟周期数}}{\text{时钟频率}}  \\
-                        &= \text{程序总时钟周期数} \times \text{时钟周期}
-\end{align*}
+\begin{aligned}
+    \text{CPU执行时间} & = \frac{\text{程序总时钟周期数}}{\text{时钟频率}} \\
+                   & = \text{程序总时钟周期数} \times \text{时钟周期}
+\end{aligned}
 $$
 
 $$
-\text{程序总时钟周期数}=\text{程序总指令条数} \times CPI
+\text{程序总时钟周期数} = \text{程序总指令条数} \times CPI
 $$
 
 $$
-    \text{程序总时钟周期数} = \sum_{i=1}^{n}(CPI_i \times C_i)
+\text{程序总时钟周期数} = \sum_{i=1}^{n}(CPI_i \times C_i)
 $$
 
 其中，第 $i$ 种指令的条数和 CPI 分别为 $C_i$ 和 $CPI_i$ 。
 
 $$
-    CPI = \sum_{i=1}^{n}(CPI_i \times F_i) = \text{程序总时钟周期数} \div \text{程序总指令条数}
+CPI = \sum_{i=1}^{n}(CPI_i \times F_i) = \text{程序总时钟周期数} \div \text{程序总指令条数}
 $$
 
 其中, $F_i$ 表示第 $i$ 种指令在程序中所占的比例。
 
 CPU 执行时间度量公式中的时钟周期、指令条数、CPI 三个因素相互制约。同一台计算机，指令条数最少的程序也不一定执行得最快。
 
-**_注：下表辅助记忆，非官方_**
+$$
+    \begin{array}{|l|l|l|}
+        \hline
+        \text{名称}          & \text{单位}                                \\
+        \hline
+        \text{主频}(f)       & \text{赫兹(Hz)}                            \\
+        \text{CPI}(CPI)    & \text{周期数每指令(cpi，cycle per instruction)} \\
+        \text{指令条数}(I)     & \text{条}                                 \\
+        \text{周期}(T)       & \text{秒(s)}                              \\
+        \text{周期数}(C)      & \text{个（c,cycles）或（t，times）}             \\
+        \text{CPU 执行时间}(t) & \text{秒(s)}                              \\
+        \hline
+    \end{array}
+$$
 
-$$
-\begin{array}{|l|l|l|}
-    \hline
-    \text{名称} & \text{缩写} & \text{单位} \\
-    \hline
-    \text{主频} & f & \text{赫兹（Hz）} \\
-    \text{CPI} & \text{CPI} & \text{周期数每指令（cpi，cycle per instruction）} \\
-    \text{指令条数} & I & \text{条} \\
-    \text{周期} & T & \text{秒（s）} \\
-    \text{周期数} & C & \text{个（c,cycles）或（t，times）} \\
-    \text{CPU 执行时间} & t & \text{秒（s）} \\
-    \hline
-\end{array}
-$$
+**_注：单位和缩写仅辅助记忆_**
 
 #### 1.2.3 MIPS、MFLOPS、GFLOPS、TFLOPS、PFLOPS、EFLOPS、ZFLOPS
 
 $$
 \begin{array}{|l|l|l|l|l|l|l|l|l|l|l|l|l|}
     \hline
-    \text{前缀} & Z & E & P & T & G & M & K & 1 & m & \mu & n & p \\
+    \text{前缀} & Z       & E       & P       & T       & G      & M      & K      & 1    & m       & \mu     & n       & p        \\
     \hline
-    10^n & 10^{21} & 10^{18} & 10^{15} & 10^{12} & 10^9 & 10^6 & 10^3 & 10^0 & 10^{-3} & 10^{-6} & 10^{-9} & 10^{-12} \\
+    10^n      & 10^{21} & 10^{18} & 10^{15} & 10^{12} & 10^9   & 10^6   & 10^3   & 10^0 & 10^{-3} & 10^{-6} & 10^{-9} & 10^{-12} \\
     \hline
-     2^n & 2^{70} & 2^{60} & 2^{50} & 2^{40} & 2^{30} & 2^{20} & 2^{10} & 2^0 & 2^{-10} & 2^{-20} & 2^{-30} & 2^{-40} \\
+    2^n       & 2^{70}  & 2^{60}  & 2^{50}  & 2^{40}  & 2^{30} & 2^{20} & 2^{10} & 2^0  & 2^{-10} & 2^{-20} & 2^{-30} & 2^{-40}  \\
     \hline
 \end{array}
 $$
@@ -164,36 +164,127 @@ $$
 
 #### 2.1.1 进位计数制及其数据之间的相互转换
 
+##### 杂项
+
+数字化编码：  
+作用：将现实世界的感觉媒体信息（如声音、文字、图画、活动图像等）转化为二进制编码表示。  
+方法：将连续信息转换为离散的“样本”信息，然后对它们用“0”和“1”进行编码。
+
+采用二进制表示的原因：  
+（1）二进制**只有两种基本状态**，容易用物理器件实现。  
+（2）二进制的**编码和运算规则简单**，可用开关电路实现，简便易行。  
+（3）两个符号 0 和 1 正好**与逻辑命题的“真”和“假”相对应**，容易通过逻辑门实现逻辑运算和程序的逻辑判断，特别是**能通过逻辑门电路方便地实现算数运算**。
+
+指令所处理的基本数据类型：  
+**数值型数据**：表示数量的多少，可比较其大小，分为整数和实数，整数又分为无符号整数和带符号整数。  
+**非数值型数据**：不表示数量的多少，没有大小之分。
+
+表示一个**数值数据**的三要素：**进位计数制**、**定/浮点表示**和**编码规则**。
+
+##### 一、进位计数制
+
+基数：数制所使用的不同数码的个数。（二进制的基数为 2（0，1），十进制的基数为 10（0~9））  
+位权：数码在不同位置上的权值。  
+一个进位数的数值大小就是它的各位数码按权相加。
+
+一般地，任意一个 r 进制数：
+
+$$
+    R=k_nk_{n-1}\cdots k_1k_0k_{-1}k_{-2}\cdots k_{-m} \text{（ $m,n$ 为正整数 ）}
+$$
+
+其值为
+
+$$
+    \begin{align*}
+        value(R) & =k_nr^n+k_{n-1}r^{n-1}+\cdots+k_1r^1+k_0r^0+k_{-1}r^{-1}+k_{-2}r^{-2}+\cdots+k_{-m}r^{-m} \\
+                 & =\sum_{i=n}^{m}k_ir^i
+    \end{align*}
+$$
+
+式中，$r$ 是基数；$r^i$ 是第 $i$ 位的位权；$k_i$ 的取值是 $0,1,\cdots r-1$ 共 $r$ 个数码中的任意一个。
+
+四种进制数之间的关系：
+
+$$
+    \begin{array}{|c|c|c|c|c|}
+        \hline
+        \text{进位计数制} & \text{二进制}  & \text{八进制}           & \text{十进制}       & \text{十六进制}           \\
+        \hline
+        \text{规则}    & \text{逢二进一} & \text{逢八进一}          & \text{逢十进一}      & \text{逢十六进一}          \\
+        \hline
+        \text{数码}    & 01          & 01234567             & 0123456789       & 0123456789ABCDEF      \\
+        \hline
+        \text{基数}    & 2           & 8                    & 10               & 16                    \\
+        \hline
+        \text{位权}    & 2^i         & 8^i                  & 10^i             & 16^i                  \\
+        \hline
+        \text{标识符}   & \text{后缀B}  & \text{后缀O}           & \text{后缀D（通常省略）} & \text{后缀H或前缀0x}       \\
+        \hline
+        \text{备注}    & \text{}     & \text{3位二进制可转为1位八进制} & \text{}          & \text{4位二进制可转为1位十六进制} \\
+        \hline
+    \end{array}
+$$
+
+##### 二、不同进制数之间的转换
+
+R 进制数转换成十进制数：**“按权展开”**。  
+十进制数转换为 R 进制数：**整数部分“除 R 取余，倒序排列”，小数部分“乘 R 取整，正序排列”。**  
+原理：R 进制数的数值表示公式。
+
+二进制与八进制和十六进制转换：3 位二进制可转为 1 位八进制，4 位二进制可转为 1 位十六进制。
+
+**_注意：_ 不是每个十进制小数都可以被二进制小数表示。**
+
 #### 2.1.2 定点数的编码表示
 
-##### 2.1.2.1 真值和机器数
+##### 一、真值和机器数
+
+**真值：带“+”或“-”符号的数。**  
+例：+123，-123。  
+真值是机器数所代表的实际值。
+
+**机器数：把符号“数字化”的数**。  
+例：原码、补码、反码、移码。  
+通常用“0”表示正，用 1 表示负。
 
 ##### 补充
 
 $$
-\begin{array}{|c|c|c|}
-    \hline
-    \text{编码} & \text{定义} & \text{解释} \\
-    \hline
-    \text{原码} &
-    \begin{equation*}
-        [x]_\text{原} = \begin{cases}
-            0,x             & 0 \le x \lt 2^n \\
-            2^n-x=2^n+|x|   & -2^n \lt x \le 0
-        \end{cases}
-    \end{equation*} &
-    \text{aaa} \\
-    \hline
-    \text{补码} &
-    \begin{equation*}
-        [x]_\text{补} = \begin{cases}
-            0,x                     & 0 \le x \lt 2^n \\
-            2^{n+1}=2^{n+1}-|x|     & -2^n \le x \lt 0
-        \end{cases}
-    \end{equation*} &
-    \text{aaa} \\
-    \hline
-\end{array}
+    \begin{array}{|c|c|c|c|c|}
+        \hline
+        \text{编码（表示法）}                    & \text{原码} & \text{补码} & \text{反码} & \text{移码} \\
+        \hline
+        \text{定义}                    &
+        \begin{equation*}
+            \lbrack x \rbrack_\text{原} =
+            \begin{cases}
+                0,x           & x\in[0,2^n)  \\
+                2^n-x=2^n+|x| & x\in(-2^n,0]
+            \end{cases}
+        \end{equation*} &
+
+        \begin{equation*}
+            \lbrack x \rbrack_\text{补} =
+            \begin{cases}
+                0,x                 & x\in[0,2^n)  \\
+                2^{n+1}=2^{n+1}-|x| & x\in[-2^n,0)
+            \end{cases}
+        \end{equation*} &
+        \begin{equation*}
+            \lbrack x\rbrack_\text{反} =
+            \begin{cases}
+                0,x           & x\in[0,2^n)  &                  \\
+                (2^{n+1}-1)+x & x\in(-2^n,0] & (mod(2^{n+1}-1))
+            \end{cases}
+        \end{equation*}  &
+        \lbrack x\rbrack_\text{移} = 2^n+x(x\in[-2^n,2^n) ,\text{其中机器字长为n+1})
+        \\
+        \hline
+        \text{解释}&
+        \\
+        \hline
+    \end{array}
 $$
 
 ### 2.2 运算方法和运算电路
