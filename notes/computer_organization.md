@@ -46,7 +46,7 @@ CPU 主要包含两种基本部件：**数据通路**和**控制器**。
 存储器分为**内存**和**外存**。  
 内存包括**主存储器**（main memory，简称**主存**或**内存储器**）和**高速缓存**（cache）。  
 CPU 能直接访问的存储器是主存储器。  
-外存（也称**辅存**、**辅助存储器**或**外存储器**）用于帮助主存储器记忆更多的信息，辅助存储器中的信息必须调入主存储器。  
+外存（也称**辅存**、**辅助存储器**或**外存储器**）用于帮助主存储器记忆更多的信息，辅助存储器中的信息必须调入主存储器。 
 **（3）外部设备和设备控制器**  
 外部设备简称外设，也称为 I/O 设备，其中，I/O 是输入/输出（input/output）的缩写。  
 外设通常由**机械部分**和**电子部分**组成，这两部分通常是可以分开的，机械部分是外部设备本身，电子部分是控制外部设备的设备控制器。  
@@ -128,7 +128,7 @@ $$
 CPU 执行时间度量公式中的时钟周期、指令条数、CPI 三个因素相互制约。同一台计算机，指令条数最少的程序也不一定执行得最快。
 
 $$
-    \begin{array}{|l|l|l|}
+\begin{array}{|l|l|l|}
         \hline
         \text{名称}          & \text{单位}                                \\
         \hline
@@ -196,7 +196,7 @@ $$
 其值为
 
 $$
-    \begin{align*}
+\begin{align*}
         value(R) & =k_nr^n+k_{n-1}r^{n-1}+\cdots+k_1r^1+k_0r^0+k_{-1}r^{-1}+k_{-2}r^{-2}+\cdots+k_{-m}r^{-m} \\
                  & =\sum_{i=n}^{m}k_ir^i
     \end{align*}
@@ -207,7 +207,7 @@ $$
 四种进制数之间的关系：
 
 $$
-    \begin{array}{|c|c|c|c|c|}
+\begin{array}{|c|c|c|c|c|}
         \hline
         \text{进位计数制} & \text{二进制}  & \text{八进制}           & \text{十进制}       & \text{十六进制}           \\
         \hline
@@ -251,40 +251,41 @@ R 进制数转换成十进制数：**“按权展开”**。
 ##### 补充
 
 $$
-    \begin{array}{|c|c|c|c|c|}
-        \hline
-        \text{编码（表示法）}                    & \text{原码} & \text{补码} & \text{反码} & \text{移码} \\
-        \hline
-        \text{定义}                    &
-        \begin{equation*}
-            \lbrack x \rbrack_\text{原} =
-            \begin{cases}
-                0,x           & x\in[0,2^n)  \\
-                2^n-x=2^n+|x| & x\in(-2^n,0]
-            \end{cases}
-        \end{equation*} &
+\begin{array}{|c|c|c|c|c|}
+    \hline
+    \text{编码（表示法）} & \text{原码} & \text{补码} & \text{反码} & \text{移码} \\
+    \hline
+    \text{定义} &
+    \begin{array}{l}
+        [x]_{\text{原}} = \\
+        \begin{cases}
+            0, x & x \in [0, 2^n) \\
+            2^n - x = 2^n + |x| & x \in (-2^n, 0]
+        \end{cases}
+    \end{array} &
 
-        \begin{equation*}
-            \lbrack x \rbrack_\text{补} =
-            \begin{cases}
-                0,x                 & x\in[0,2^n)  \\
-                2^{n+1}=2^{n+1}-|x| & x\in[-2^n,0)
-            \end{cases}
-        \end{equation*} &
-        \begin{equation*}
-            \lbrack x\rbrack_\text{反} =
-            \begin{cases}
-                0,x           & x\in[0,2^n)  &                  \\
-                (2^{n+1}-1)+x & x\in(-2^n,0] & (mod(2^{n+1}-1))
-            \end{cases}
-        \end{equation*}  &
-        \lbrack x\rbrack_\text{移} = 2^n+x(x\in[-2^n,2^n) ,\text{其中机器字长为n+1})
-        \\
-        \hline
-        \text{解释}&
-        \\
-        \hline
-    \end{array}
+    \begin{array}{l}
+        [x]_{\text{补}} = \\
+        \begin{cases}
+            0, x & x \in [0, 2^n) \\
+            2^{n+1} - |x| & x \in [-2^n, 0)
+        \end{cases}
+    \end{array} &
+
+    \begin{array}{l}
+        [x]_{\text{反}} = \\
+        \begin{cases}
+            0, x & x \in [0, 2^n) \\
+            (2^{n+1} - 1) + x & x \in (-2^n, 0] \ (\text{mod}(2^{n+1} - 1))
+        \end{cases}
+    \end{array} &
+
+    [x]_{\text{移}} = 2^n + x \ (x \in [-2^n, 2^n)) 
+    \text{（其中机器字长为n+1）} \\
+    \hline
+    \text{解释} & & & & \\
+    \hline
+\end{array}
 $$
 
 ### 2.2 运算方法和运算电路
