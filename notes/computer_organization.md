@@ -128,17 +128,17 @@ CPU 执行时间度量公式中的时钟周期、指令条数、CPI 三个因素
 
 $$
 \begin{array}{|l|l|l|}
-        \hline
-        \text{名称}          & \text{单位}                                \\
-        \hline
-        \text{主频}(f)       & \text{赫兹(Hz)}                            \\
-        \text{CPI}(CPI)    & \text{周期数每指令(cpi，cycle per instruction)} \\
-        \text{指令条数}(I)     & \text{条}                                 \\
-        \text{周期}(T)       & \text{秒(s)}                              \\
-        \text{周期数}(C)      & \text{个（c,cycles）或（t，times）}             \\
-        \text{CPU 执行时间}(t) & \text{秒(s)}                              \\
-        \hline
-    \end{array}
+    \hline
+    \text{名称}          & \text{单位}                                \\
+    \hline
+    \text{主频}(f)       & \text{赫兹(Hz)}                            \\
+    \text{CPI}(CPI)    & \text{周期数每指令(cpi，cycle per instruction)} \\
+    \text{指令条数}(I)     & \text{条}                                 \\
+    \text{周期}(T)       & \text{秒(s)}                              \\
+    \text{周期数}(C)      & \text{个（c,cycles）或（t，times）}             \\
+    \text{CPU 执行时间}(t) & \text{秒(s)}                              \\
+    \hline
+\end{array}
 $$
 
 **_注：单位和缩写仅辅助记忆_**
@@ -247,64 +247,207 @@ R 进制数转换成十进制数：**“按权展开”**。
 例：原码、补码、反码、移码。
 通常用“0”表示正，用 1 表示负。
 
+##### 二、机器数的定点表示
+
+定点表示：小数点位置约定为固定位置。  
+浮点表示：小数点位置约定为可浮动。
+
+在现代计算机中，**通常用补码整数表示整数，用原码小数表示浮点数的尾数部分，用移码表示浮点数的阶码部分**。
+
+##### 三、原码、补码、反码、移码
+
+###### （1） 原码
+
+整数原码的定义：
+
+$$
+[x]_{\text{原}} =
+\begin{cases}
+    0, x                & x \in [0, 2^n)  \\
+    2^n - x = 2^n + |x| & x \in (-2^n, 0]
+\end{cases}
+$$
+
+式中，$x$ 为真值，$n$ 为整数的位数。
+
+小数原码的定义：
+
+$$
+[x]_{\text{原}} =
+\begin{cases}
+    x   & x \in [0, 1)  \\
+    1-x & x \in (-1, 0]
+\end{cases}
+$$
+
+式中，$x$ 为真值。
+
+###### （2） 补码
+
+定义：
+
+$$
+[x]_{\text{补}} =
+\begin{cases}
+    0, x          & x \in [0, 2^n)  \\
+    2^{n+1} - |x| & x \in [-2^n, 0)
+\end{cases}
+$$
+
+###### （3） 反码
+
+定义：
+
+$$
+[x]_{\text{反}} =
+\begin{cases}
+    0, x              & x \in [0, 2^n)                              \\
+    (2^{n+1} - 1) + x & x \in (-2^n, 0] \ (\text{mod}(2^{n+1} - 1))
+\end{cases}
+$$
+
+###### （4） 移码
+
+定义：
+
+$$
+[x]_{\text{移}} = 2^n + x \ (x \in [-2^n, 2^n)) \ \text{（其中机器字长为n+1）}
+$$
+
 ##### 补充
 
 $$
-\begin{array}{|c|c|c|c|c|}
+\begin{array}{|l|l|l|l|l|}
     \hline
-    \text{编码（表示法）} & \text{原码} & \text{补码} & \text{反码} & \text{移码} \\
+    \text{编码（表示法）}                                                       & \text{原码} & \text{补码} & \text{反码} & \text{移码}
+    \\
     \hline
-    \text{定义} &
-    \begin{array}{l}
-        [x]_{\text{原}} = \\
-        \begin{cases}
-            0, x & x \in [0, 2^n) \\
-            2^n - x = 2^n + |x| & x \in (-2^n, 0]
-        \end{cases}
-    \end{array} &
-
-    \begin{array}{l}
-        [x]_{\text{补}} = \\
-        \begin{cases}
-            0, x & x \in [0, 2^n) \\
-            2^{n+1} - |x| & x \in [-2^n, 0)
-        \end{cases}
-    \end{array} &
-
-    \begin{array}{l}
-        [x]_{\text{反}} = \\
-        \begin{cases}
-            0, x & x \in [0, 2^n) \\
-            (2^{n+1} - 1) + x & x \in (-2^n, 0] \ (\text{mod}(2^{n+1} - 1))
-        \end{cases}
-    \end{array} &
-
-    [x]_{\text{移}} = 2^n + x \ (x \in [-2^n, 2^n))
-    \text{（其中机器字长为n+1）} \\
+    \text{解释}                                                            &           &           &           &           \\
+    \\
     \hline
-    \text{解释} & & & & \\
+    \begin{array}{l}
+        \text{最大值} \\
+        \text{最小值}
+    \end{array}                                                     &
+    \begin{aligned}{l}
+        [x]_{\text{原}max} = 0,111 \ 1111 = +2^7-1 = +127 \\
+        [x]_{\text{原}min} = 1,111 \ 1111 = -2^7+1 = -127
+    \end{aligned}     &
+    \begin{aligned}{l}
+        [x]_{\text{补}max} = 0,111 \ 1111 & = +2^7-1 & = +127 \\
+        [x]_{\text{补}min} = 1,000 \ 0000 & = -2^7   & = -128
+    \end{aligned} &
+    \begin{aligned}
+        [x]_{\text{反}max} = 0,111 \ 1111 = +2^7-1 = +127 \\
+        [x]_{\text{反}min} = 1,000 \ 0000 = -2^7+1 = -127 \\
+    \end{aligned}     &
+    \begin{aligned}
+        [x]_{\text{移}max} = 0,000 \ 0000 & = +2^7-1 & = +127 \\
+        [x]_{\text{移}min} = 1,000 \ 0000 & = -2^7   & = -127 \\
+    \end{aligned}
+    \\
+    \hline
+    \text{0的表示（8位）}                                                      &
+    \begin{array}{l}
+        [+0]_\text{原} = 0,000 \ 0000 \\
+        [-0]_\text{原} = 1,000 \ 0000
+    \end{array}                                      &
+    [0]_\text{补} = 0,000 \ 0000                                          &
+    \begin{array}{l}
+        [+0]_\text{反} = 0,000 \ 0000 \\
+        [-0]_\text{反} = 1,111 \ 1111
+    \end{array}                                      &
+    [0]_\text{移} = 1,000 \ 0000
+    \\
+    \hline
+    \text{优点}                                                            &
+    \begin{array}{l}
+        \text{与真值的对应关系直观} \\
+        \text{实现乘除运算简便}
+    \end{array}                                                 &
+    \begin{array}{l}
+        \text{0的表示唯一}      \\
+        \text{表示范围多一个最小负数} \\
+        \text{符号位可参与运算}
+    \end{array}                                                &
+    \begin{array}{l}
+        \text{与原码每一位相反} \\
+        \text{通常用作数码变换的中间表示}
+    \end{array}
+                                                                         &
+    \begin{array}{l}
+        \text{0的表示唯一}      \\
+        \text{表示范围多一个最小负数} \\
+        \text{和补码仅差一个符号位}  \\
+        \text{保持了数据原有的大小顺序}
+    \end{array}
+    \\
+    \hline
+    \text{缺点}                                                            &
+    \begin{array}{l}
+        \text{0的表示不唯一}     \\
+        \text{表示范围少一个最小负数} \\
+        \text{符号和数值部分须分开处理}
+    \end{array}                                                &
+                                                                         &
+    \begin{array}{l}
+        \text{0的表示不唯一}     \\
+        \text{表示范围少一个最小负数} \\
+        \text{符号和数值部分须分开处理}
+    \end{array}                                                &
+
+    \\
     \hline
 \end{array}
 $$
 
 ### 2.2 运算方法和运算电路
 
+#### 2.2.1 基本运算部件
+
+#### 2.2.2 加/减运算
+
+#### 2.2.3 乘/除运算
+
 ### 2.3 整数的表示和运算
 
-#### 整数的表示
+#### 2.3.1 无符号整数的表示和运算
 
-|                  |     |
-| ---------------- | --- |
-| 有符号整数的表示 |     |
-|                  |     |
-
-#### 整数的运算
-
-##### 加
+#### 2.3.2 带符号整数的表示和运算
 
 ### 2.4 浮点数的表示和运算
 
+#### 2.4.1 浮点数的表示（IEEE 754 标准）
+
+#### 2.4.2 浮点数的加/减运算
+
 ## 3 存储器层次结构
+
+### 3.1 存储器的分类
+
+### 3.2 层次化存储器的基本结构
+
+### 3.3 半导体随机存取存储器
+
+#### 3.3.1 SRAM 存储器
+
+#### 3.3.2 DRAM 存储器
+
+#### 3.3.3 Flash 存储器
+
+### 3.4 主存储器
+
+#### 3.4.1 DRAM 芯片和内存条
+
+#### 3.4.2 多模块存储器
+
+#### 3.4.3 主存和 CPU 之间的连接
+
+### 3.5 外部存储器
+
+### 3.6 高速缓冲存储器（Cache）
+
+### 3.7 虚拟存储器
 
 ## 4 指令系统
 
