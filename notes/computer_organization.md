@@ -329,11 +329,11 @@ $$
         \text{最大值} \\
         \text{最小值}
     \end{array}                                                     &
-    \begin{aligned}{l}
+    \begin{aligned}
         [x]_{\text{原}max} = 0,111 \ 1111 = +2^7-1 = +127 \\
         [x]_{\text{原}min} = 1,111 \ 1111 = -2^7+1 = -127
     \end{aligned}     &
-    \begin{aligned}{l}
+    \begin{aligned}
         [x]_{\text{补}max} = 0,111 \ 1111 & = +2^7-1 & = +127 \\
         [x]_{\text{补}min} = 1,000 \ 0000 & = -2^7   & = -128
     \end{aligned} &
