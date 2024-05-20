@@ -1,0 +1,13 @@
+# Ignore compiled binaries
+*.exe
+
+# Ignore log files
+*.log
+
+# Ignore latex files
+*.aux
+*.fls
+*.log
+*.fdb_latexmk
+*.synctex.gz
+*.pdf
