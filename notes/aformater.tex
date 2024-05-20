@@ -1,82 +1,78 @@
-\begin{array}{|l|l|l|l|l|}
-    \hline
-    \text{编码（表示法）}                                                       & \text{原码} & \text{补码} & \text{反码} & \text{移码}
-    \\
-    \hline
-    \text{解释}                                                            &           &           &           &           \\
-    \\
-    \hline
-    \begin{array}{l}
-        \text{最大值} \\
-        \text{最小值}
-    \end{array}                                                     &
-    \begin{aligned}
-        [x]_{\text{原}max} = 0,111 \ 1111 = +2^7-1 = +127 \\
-        [x]_{\text{原}min} = 1,111 \ 1111 = -2^7+1 = -127
-    \end{aligned}     &
-    \begin{aligned}
-        [x]_{\text{补}max} = 0,111 \ 1111 & = +2^7-1 & = +127 \\
-        [x]_{\text{补}min} = 1,000 \ 0000 & = -2^7   & = -128
-    \end{aligned} &
-    \begin{aligned}
-        [x]_{\text{反}max} = 0,111 \ 1111 = +2^7-1 = +127 \\
-        [x]_{\text{反}min} = 1,000 \ 0000 = -2^7+1 = -127 \\
-    \end{aligned}     &
-    \begin{aligned}
-        [x]_{\text{移}max} = 0,000 \ 0000 & = +2^7-1 & = +127 \\
-        [x]_{\text{移}min} = 1,000 \ 0000 & = -2^7   & = -127 \\
-    \end{aligned}
-    \\
-    \hline
-    \text{0的表示（8位）}                                                      &
-    \begin{array}{l}
-        [+0]_\text{原} = 0,000 \ 0000 \\
-        [-0]_\text{原} = 1,000 \ 0000
-    \end{array}                                      &
-    [0]_\text{补} = 0,000 \ 0000                                          &
-    \begin{array}{l}
-        [+0]_\text{反} = 0,000 \ 0000 \\
-        [-0]_\text{反} = 1,111 \ 1111
-    \end{array}                                      &
-    [0]_\text{移} = 1,000 \ 0000
-    \\
-    \hline
-    \text{优点}                                                            &
-    \begin{array}{l}
-        \text{与真值的对应关系直观} \\
-        \text{实现乘除运算简便}
-    \end{array}                                                 &
-    \begin{array}{l}
-        \text{0的表示唯一}      \\
-        \text{表示范围多一个最小负数} \\
-        \text{符号位可参与运算}
-    \end{array}                                                &
-    \begin{array}{l}
-        \text{与原码每一位相反} \\
-        \text{通常用作数码变换的中间表示}
-    \end{array}
-                                                                         &
-    \begin{array}{l}
-        \text{0的表示唯一}      \\
-        \text{表示范围多一个最小负数} \\
-        \text{和补码仅差一个符号位}  \\
-        \text{保持了数据原有的大小顺序}
-    \end{array}
-    \\
-    \hline
-    \text{缺点}                                                            &
-    \begin{array}{l}
-        \text{0的表示不唯一}     \\
-        \text{表示范围少一个最小负数} \\
-        \text{符号和数值部分须分开处理}
-    \end{array}                                                &
-                                                                         &
-    \begin{array}{l}
-        \text{0的表示不唯一}     \\
-        \text{表示范围少一个最小负数} \\
-        \text{符号和数值部分须分开处理}
-    \end{array}                                                &
+$$
+    \begin{array}{|l|l|l|l|l|}
+        \hline
+        \text{编码（表示法）}                                                & \text{原码} & \text{补码} & \text{反码} & \text{移码}
+        \\
+        \hline
+        \text{计算方法}                                                   &           &           &           &           \\
+        \\
+        \hline
+        \begin{array}{l}
+            特殊值 \\
+            \text{(补码和移码为通常情况)}
+        \end{array}                                           &
+        \begin{array}{lll}
+            [x]_{\text{原}max} & = 0,111 \ 1111 & = +127 \\
+            [+0]_\text{原}     & = 0,000 \ 0000 & =+0    \\
+            [-0]_\text{原}     & = 1,000 \ 0000 & =-0    \\
+            [x]_{\text{原}min} & = 1,111 \ 1111 & = -127
+        \end{array}   &
+        \begin{array}{lll}
+            [x]_{\text{补}max}   & = 0,111 \ 1111 & = +127 \\
+            [0]_\text{补}        & = 0,000 \ 0000 & =0     \\
+            [x]_{\text{补}min}+1 & = 1,000 \ 0001 & = -127 \\
+            [x]_{\text{补}min}   & = 1,000 \ 0000 & = -128
+        \end{array} &
+        \begin{array}{lll}
+            [x]_{\text{反}max} & = 0,111 \ 1111 & = +127 \\
+            [+0]_\text{反}     & = 0,000 \ 0000 & =+0    \\
+            [-0]_\text{反}     & = 1,111 \ 1111 & =-0    \\
+            [x]_{\text{反}min} & = 1,000 \ 0000 & = -127 \\
+        \end{array}  &
+        \begin{array}{lll}
+            [x]_{\text{移}max} & = 1,111 \ 1111 & = +127 \\
+            [0]_\text{移}      & = 1,000 \ 0000 & =0
+            \\          [x]_{\text{移}min}+1 &= 0,000 \ 0001 &=-127
+            \\
+            [x]_{\text{移}min} & = 0,000 \ 0000 & = -128
+        \end{array}
+        \\
+        \hline
+        \text{优点}                                                     &
+        \begin{array}{l}
+            \text{与真值的对应关系直观} \\
+            \text{实现乘除运算简便}
+        \end{array}                                          &
+        \begin{array}{l}
+            \text{0的表示唯一}      \\
+            \text{表示范围多一个最小负数} \\
+            \text{符号位可参与运算}
+        \end{array}                                         &
+        \begin{array}{l}
+            \text{通常用作数码变换的中间表示}
+        \end{array}
+                                                                      &
+        \begin{array}{l}
+            \text{0的表示唯一}      \\
+            \text{表示范围多一个最小负数} \\
+            \text{保持了数据原有的大小顺序}
+        \end{array}
+        \\
+        \hline
+        \text{缺点}                                                     &
+        \begin{array}{l}
+            \text{0的表示不唯一}     \\
+            \text{表示范围少一个最小负数} \\
+            \text{符号和数值部分须分开处理}
+        \end{array}                                         &
+                                                                      &
+        \begin{array}{l}
+            \text{0的表示不唯一}     \\
+            \text{表示范围少一个最小负数} \\
+            \text{符号和数值部分须分开处理}
+        \end{array}                                         &
 
-    \\
-    \hline
-\end{array}
+        \\
+        \hline
+    \end{array}
+$$
